@@ -1,31 +1,29 @@
 import { Box, Button, Checkbox, FormControlLabel, FormLabel, TextField } from '@mui/material';
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { toast, Toaster } from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom'
 
 const BookDetail = () => {
 
   const id = useParams().id;
   const URL = `http://localhost:5000/books/${id}`;
+  const history = useNavigate();
   
-  const [inputs, setInputs] = useState({
-    name: '',
-    author: String(''),
-    description: String(''),
-    price : Number(''),
-    image : String('')
-  });
+  const [inputs, setInputs] = useState();
   const [checked, setChecked] = useState(false)
 
   useEffect(() => {
     const fetchData = async() => {
       await Axios.get(URL)
-      .then((res) => console.log(res.data))
+      .then((res) => res.data)
+      .then((data) => setInputs(data.book))
       .catch((err) => console.log(err));
     }
-    fetchData().then((data) => setInputs(data));
+    fetchData();
   }, [id]);
-
+  console.log(inputs);
+  console.log(checked);
   const handleChange = (e) => {
     setInputs((prev) => ({
       ...prev,
@@ -34,19 +32,38 @@ const BookDetail = () => {
   }
 
   const updateData = async() => {
-    Axios.put()
+    Axios.put(URL,{
+      name : String(inputs.name),
+      author : String(inputs.author),
+      description : String(inputs.description),
+      price : Number(inputs.price),
+      image : String(inputs.image),
+      available : Boolean(checked)
+    }).then((res) => {
+      console.log(res);
+      toast.success('Success Update');
+    })
+    .then(setTimeout(() => {
+        history('/books')
+    }, 2000))
+    .catch((err) => {
+      console.log(err)
+      toast.error('Somthing went wrong');
+    });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    updateData();
   }
 
 
 
   return (
     <React.Fragment>
+      <Toaster position='top-center' reverseOrder={true}/>
       <div>
-      <form onSubmit={handleSubmit}>
+      {inputs && (<form onSubmit={handleSubmit}>
           <Box 
             display='flex' 
             flexDirection='column' 
@@ -75,7 +92,7 @@ const BookDetail = () => {
 
             <Button variant='contained' type='submit' sx={{ padding:"10px" }}>Update Book</Button>
           </Box>
-        </form>
+        </form>)}
       </div>
     </React.Fragment>
   )

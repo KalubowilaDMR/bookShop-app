@@ -20,7 +20,7 @@ const Books = () => {
 
   return (
     <React.Fragment>
-      <div>
+      <div className='book-list'>
         <ul>
           {books && 
             books.map((book, index) => (

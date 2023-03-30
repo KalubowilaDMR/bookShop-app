@@ -13,18 +13,20 @@ const Header = () => {
     <React.Fragment>
         <AppBar sx={{ backgroundColor:"#232F3D" }} position='sticky'>
           <Toolbar>
-            <Typography>
-              <LibraryBooksOutlinedIcon/>
-            </Typography>
+            <NavLink to='/' style={{ color:'white' }}>
+              <Typography>
+                <LibraryBooksOutlinedIcon/>
+              </Typography>
+            </NavLink>
             <Tabs 
               sx={{ ml:'auto' }}
               indicatorColor='primary' 
               textColor='inherit' 
               value={value} 
               onChange={(e, val) => setValue(val)}>
-              <Tab LinkComponent={NavLink} to="/add" label='Add product'/>
-              <Tab LinkComponent={NavLink} to="/books" label='Books'/>
-              <Tab LinkComponent={NavLink} to="/about" label='About Us'/>
+              <Tab sx={{fontSize : {xs:'12px', sm:'12px', md:'14px', lg:'16px'}}} LinkComponent={NavLink} to="/add" label='Add product'/>
+              <Tab sx={{fontSize : {xs:'12px', sm:'12px', md:'14px', lg:'16px'}}} LinkComponent={NavLink} to="/books" label='Books'/>
+              <Tab sx={{fontSize : {xs:'12px', sm:'12px', md:'14px', lg:'16px'}}} LinkComponent={NavLink} to="/about" label='About Us'/>
             </Tabs>
           </Toolbar>
         </AppBar>
